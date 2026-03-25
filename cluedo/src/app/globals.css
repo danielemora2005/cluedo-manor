@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Custom Properties ───────────────────────────── */
+:root {
+  --color-bg:         #08080b;
+  --color-surface:    #18181f;
+  --color-surface-2:  #2a2a32;
+  --color-border:     rgba(245, 158, 11, 0.2);
+  --color-gold:       #f59e0b;
+  --color-gold-light: #fbbf24;
+  --color-text:       #f7ecd8;
+  --color-text-muted: #a0a0ab;
+  --color-crimson:    #dc2626;
+
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-body:  'Lora', Georgia, serif;
+}
+
+/* ── Base reset ──────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+/* ── Scrollbar styling ───────────────────────────────── */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--color-surface); }
+::-webkit-scrollbar-thumb  { background: rgba(245,158,11,0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(245,158,11,0.7); }
+
+/* ── Utility classes ─────────────────────────────────── */
+@layer components {
+  .manor-card {
+    @apply bg-obsidian-800/80 border border-manor-600/20 rounded-lg
+           shadow-manor backdrop-blur-sm;
+  }
+
+  .manor-btn {
+    @apply inline-flex items-center justify-center gap-2
+           px-4 py-2 rounded-md font-serif font-semibold
+           transition-all duration-200 cursor-pointer
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .manor-btn-primary {
+    @apply manor-btn bg-gold-600 hover:bg-gold-500 text-obsidian-950
+           shadow-glow hover:shadow-none;
+  }
+
+  .manor-btn-secondary {
+    @apply manor-btn bg-obsidian-700 hover:bg-obsidian-600
+           text-manor-100 border border-manor-600/30;
+  }
+
+  .manor-btn-danger {
+    @apply manor-btn bg-crimson-700 hover:bg-crimson-600 text-white;
+  }
+
+  .manor-input {
+    @apply w-full bg-obsidian-900 border border-manor-600/30 rounded-md
+           px-3 py-2 text-manor-100 placeholder:text-obsidian-400
+           focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500/30
+           transition-colors duration-200;
+  }
+
+  .section-title {
+    @apply font-serif text-gold-400 text-lg font-bold uppercase tracking-widest;
+  }
+}
+
+/* ── Animations ──────────────────────────────────────── */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  45%       { opacity: 0.88; }
+  48%       { opacity: 0.92; }
+  51%       { opacity: 0.85; }
+}
+
+@keyframes candleGlow {
+  0%, 100% { box-shadow: 0 0 8px  rgba(245,158,11,0.4); }
+  50%       { box-shadow: 0 0 24px rgba(245,158,11,0.7); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-slide-up  { animation: slideUp 0.35s ease-out; }
+.animate-fade-in   { animation: fadeIn  0.4s  ease-out; }
+.animate-flicker   { animation: flicker 3s ease-in-out infinite; }
+.animate-glow      { animation: candleGlow 2s ease-in-out infinite; }
+
+/* ── Game board specific ─────────────────────────────── */
+.room-tile {
+  @apply relative flex flex-col items-center justify-center
+         rounded-lg border border-white/10 cursor-pointer
+         transition-all duration-200 select-none p-2;
+  min-height: 80px;
+}
+
+.room-tile:hover {
+  @apply border-gold-500/50 brightness-125;
+}
+
+.room-tile.active {
+  @apply border-gold-400 ring-2 ring-gold-400/30;
+  animation: candleGlow 2s ease-in-out infinite;
+}
+
+.room-tile.reachable {
+  @apply border-gold-500/40 ring-1 ring-gold-400/20 brightness-110;
+}
+
+.room-tile.current {
+  @apply border-gold-400/60;
+}
+
+.player-token {
+  @apply w-5 h-5 rounded-full border-2 border-white/60
+         flex items-center justify-center text-xs font-bold
+         shadow-md z-10 relative;
+}
+
+/* ── Card styles ─────────────────────────────────────── */
+.game-card {
+  @apply relative rounded-lg border p-3 text-center cursor-pointer
+         transition-all duration-200 select-none;
+  background: linear-gradient(135deg, #1a1a24 0%, #0f0f18 100%);
+  border-color: rgba(245,158,11,0.25);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+.game-card:hover {
+  border-color: rgba(245,158,11,0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+}
+
+.game-card.selected {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #2a1f00 0%, #1a1200 100%);
+  box-shadow: 0 0 16px rgba(245,158,11,0.3);
+}
+
+/* ── Modal overlay ───────────────────────────────────── */
+.modal-overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center
+         bg-black/80 backdrop-blur-sm;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-panel {
+  @apply relative bg-obsidian-900 border border-manor-600/30 rounded-xl
+         p-6 shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto;
+  animation: slideUp 0.3s ease-out;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(245,158,11,0.1);
+}
